@@ -8,6 +8,7 @@ from app.rag.splitter import split_documents
 from app.rag.vector_store import create_vector_store
 from app.rag.retriever import get_retriever
 from app.chains.rag_chain import create_rag_chain
+from app.chains.job_match_chain import create_job_match_chain
 
 
 # ============================================================
@@ -154,3 +155,40 @@ if "rag_chain" in st.session_state:
             st.warning(
                 "Please enter a question about your resume."
             )
+
+st.divider()
+
+st.header("🎯 Job Description Matcher")
+
+job_description = st.text_area(
+    "Paste the Job Description",
+    placeholder="Paste the job description here..."
+)
+
+if st.button("Match Resume with Job"):
+
+    if "documents" not in st.session_state:
+        st.warning("Please upload your resume first.")
+
+    elif not job_description:
+        st.warning("Please enter a job description.")
+
+    else:
+
+        resume_text = "\n\n".join(
+            doc.page_content
+            for doc in st.session_state.documents
+        )
+
+        job_match_chain = create_job_match_chain()
+
+        result = job_match_chain.invoke(
+            {
+                "resume": resume_text,
+                "job_description": job_description
+            }
+        )
+
+        st.subheader("📊 Job Match Analysis")
+
+        st.write(result)
