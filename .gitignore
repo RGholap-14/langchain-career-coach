@@ -4,3 +4,5 @@ __pycache__/
 .env
 .chroma/
 .vscode/
+# ChromaDB local data
+data/vector_store/
