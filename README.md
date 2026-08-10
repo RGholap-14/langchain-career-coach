@@ -2,16 +2,35 @@
 
 An AI-powered career assistant built with LangChain, Streamlit, OpenAI, ChromaDB, and Retrieval-Augmented Generation (RAG).
 
-The application helps users:
+## Table of Contents
 
-- Ask general career-related questions
-- Upload and ask questions about their resume
-- Compare their resume against a job description
-- Identify matching and missing skills
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Pipelines](#pipelines)
+  - [RAG Pipeline](#rag-pipeline)
+  - [Agent Pipeline](#agent-pipeline)
+- [Future Improvements](#future-improvements)
+- [Project Status](#project-status)
+- [Author](#author)
 
 ---
 
-## 🏗️ Architecture
+## Features
+
+The application helps users:
+
+- Ask general career-related questions (Career Coach)
+- Upload and ask questions about their resume (Resume Assistant)
+- Compare a resume against a job description (Job Matcher)
+- Identify matching and missing skills and receive recommendations
+
+
+## Architecture
 
 ```text
                          Streamlit
@@ -30,285 +49,201 @@ The application helps users:
                             └──────┬──────┘
                                    ▼
                               OpenAI LLM
-
-✨ Features
-💼 1. Career Coach
-
-Users can ask general career-related questions and receive AI-generated career guidance.
-
-Example:
-
-How can I prepare for a Python interview?
-📄 2. Resume Assistant
-
-Users can upload a PDF or DOCX resume and ask questions about their resume.
-
-The application:
-
-Loads the document
-Splits the document into chunks
-Generates embeddings
-Stores embeddings in ChromaDB
-Retrieves relevant chunks
-Generates an answer using RAG
-
-Example questions:
-
-What programming languages do I know?
-How many years of experience do I have?
-What projects are mentioned in my resume?
-🎯 3. Job Description Matcher
-
-Users can paste a job description and compare it against their uploaded resume.
-
-The Career Agent analyzes:
-
-Matching skills
-Missing skills
-Relevant experience
-Job fit
-Recommendations
-
-The job matching functionality uses a LangChain Agent and Tool.
-
-🛠️ Tech Stack
-Python
-LangChain
-LangChain OpenAI
-OpenAI
-Streamlit
-ChromaDB
-Python-dotenv
-PDF/DOCX document loaders
+```
 
 
-🧠 LangChain Concepts Demonstrated
-This project demonstrates practical LangChain concepts including:
+## Tech Stack
 
-Document Loaders
-Text Splitting
-Embeddings
-Vector Stores
-Retrievers
-Retrieval-Augmented Generation (RAG)
-Prompt Templates
-LCEL Chains
-LangChain Tools
-Tool Calling
-Agents
-Streamlit integration
+- Python
+- LangChain
+- OpenAI (LLMs & Embeddings)
+- Streamlit (UI)
+- ChromaDB (vector store)
+- python-dotenv
+- PDF/DOCX document loaders
 
 
-📁 Project Structure
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd langchain-career-coach
+```
+
+2. Create a virtual environment
+
+For Windows:
+
+```bash
+python -m venv venv
+```
+
+3. Activate the virtual environment (Windows PowerShell example)
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+
+## Configuration
+
+Create a `.env` file in the project root with your OpenAI key:
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+Security: Never commit your `.env` file. Ensure `.gitignore` contains:
+
+```
+.env
+venv/
+__pycache__/
+data/vector_store/
+```
+
+
+## Usage
+
+Start the Streamlit application after activating your virtual environment:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The application will open in your browser. The main sections are:
+
+- Career Coach — Ask career questions (interview prep, career strategies, etc.)
+- Resume Assistant — Upload a resume (PDF/DOCX) and ask questions about its content
+- Job Description Matcher — Paste a job description and match it against the uploaded resume
+
+
+## Project Structure
+
+```
 langchain-career-coach/
-│
 ├── app/
-│   │
 │   ├── agents/
 │   │   └── career_agent.py
-│   │
 │   ├── chains/
 │   │   ├── career_chain.py
 │   │   ├── rag_chain.py
 │   │   └── job_match_chain.py
-│   │
 │   ├── prompts/
 │   │   ├── rag_prompt.py
 │   │   └── job_match_prompt.py
-│   │
 │   ├── rag/
 │   │   ├── loaders.py
 │   │   ├── splitter.py
 │   │   ├── embeddings.py
 │   │   ├── vector_store.py
 │   │   └── retriever.py
-│   │
 │   └── tools/
 │       └── job_tools.py
-│
 ├── data/
-│
 ├── .env
 ├── .gitignore
 ├── requirements.txt
 ├── streamlit_app.py
 └── README.md
+```
 
 
-⚙️ Setup
-1. Clone the repository
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd langchain-career-coach
-2. Create a virtual environment
+## Pipelines
 
-For Windows:
-
-python -m venv venv
-3. Activate the virtual environment
-.\venv\Scripts\Activate.ps1
-
-You should see:
-
-(venv)
-
-at the beginning of your terminal prompt.
-
-4. Install dependencies
-pip install -r requirements.txt
-🔐 Configure OpenAI API Key
-
-Create a .env file in the project root:
-
-OPENAI_API_KEY=your_api_key_here
-
-Replace:
-
-your_api_key_here
-
-with your actual OpenAI API key.
-
-
-⚠️ Security
-Never commit your .env file to GitHub.
-Make sure .gitignore contains:
-
-.env
-venv/
-__pycache__/
-data/vector_store/
-
-
-▶️ Run the Application
-Activate the virtual environment:
-
-.\venv\Scripts\Activate.ps1
-
-Then start Streamlit:
-
-streamlit run streamlit_app.py
-
-The application will open in your browser.
-
-🖥️ Application
-
-The application contains three main sections:
-
-Career Coach
-💼 Career Coach
-
-Ask general career-related questions.
-
-Resume Assistant
-📄 Resume Assistant
-
-Upload a PDF or DOCX resume and ask questions about it.
-
-Job Description Matcher
-🎯 Job Description Matcher
-
-Upload your resume, paste a job description, and receive an AI-powered job match analysis.
-
-🔄 RAG Pipeline
+### RAG Pipeline
 
 The resume assistant follows this pipeline:
 
 Resume PDF/DOCX
-       ↓
+   ↓
 Document Loader
-       ↓
+   ↓
 Text Splitter
-       ↓
+   ↓
 Document Chunks
-       ↓
+   ↓
 OpenAI Embeddings
-       ↓
+   ↓
 ChromaDB Vector Store
-       ↓
+   ↓
 Retriever
-       ↓
+   ↓
 Relevant Context
-       ↓
+   ↓
 RAG Chain
-       ↓
+   ↓
 LLM
-       ↓
+   ↓
 Answer
-🤖 Agent Pipeline
+
+
+### Agent Pipeline
 
 The job matcher follows this pipeline:
 
-Resume
-   +
-Job Description
-       ↓
+Resume + Job Description
+   ↓
 Career Agent
-       ↓
+   ↓
 Job Match Tool
-       ↓
+   ↓
 Job Match Chain
-       ↓
+   ↓
 LLM
-       ↓
+   ↓
 Job Match Analysis
-💡 Example Workflow
-Step 1
 
-Open the application.
 
-Step 2
+## Example Workflow
 
-Ask a career question:
+1. Open the application.
+2. Ask a career question (e.g., "How can I prepare for a Python interview?").
+3. Upload your resume.
+4. Ask resume-specific questions (e.g., "What technical skills do I have?").
+5. Paste a job description.
+6. Click "Match Resume with Job" to get a job match analysis and recommendations.
 
-How can I prepare for a Python interview?
-Step 3
 
-Upload your resume.
+## Future Improvements
 
-Step 4
+- PostgreSQL persistence
+- Dockerization
+- Conversation memory
+- User authentication
+- Job application tracking
+- Structured JSON output
+- Improved job matching scores
+- Resume improvement suggestions
+- Cloud deployment
+- Automated resume-to-job recommendations
 
-Ask:
 
-What technical skills do I have?
-Step 5
+## Project Status
 
-Paste a job description.
-
-Step 6
-
-Click:
-
-Match Resume with Job
-
-The application generates an analysis of how well the resume matches the job description.
-
-🚧 Future Improvements
-Possible future improvements include:
-
-PostgreSQL persistence
-Dockerization
-Conversation memory
-User authentication
-Job application tracking
-Structured JSON output
-Improved job matching scores
-Resume improvement suggestions
-Cloud deployment
-Automated resume-to-job recommendations
-
-📌 Project Status
 Current implementation includes:
 
-✅ LangChain Career Chat
-✅ Resume Document Loading
-✅ Text Splitting
-✅ OpenAI Embeddings
-✅ ChromaDB Vector Store
-✅ Resume RAG
-✅ Resume Q&A
-✅ Job Description Matcher
-✅ LangChain Tool
-✅ Career Agent
-✅ Streamlit UI
+- ✅ LangChain Career Chat
+- ✅ Resume Document Loading
+- ✅ Text Splitting
+- ✅ OpenAI Embeddings
+- ✅ ChromaDB Vector Store
+- ✅ Resume RAG
+- ✅ Resume Q&A
+- ✅ Job Description Matcher
+- ✅ LangChain Tool
+- ✅ Career Agent
+- ✅ Streamlit UI
 
-👩‍💻 Author
+
+## Author
+
 Rutuja
